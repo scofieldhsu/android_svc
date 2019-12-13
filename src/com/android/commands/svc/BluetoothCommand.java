@@ -53,7 +53,10 @@ public class BluetoothCommand extends Svc.Command {
             adapter.disable();
 // start of get bluetooth mac address {
         } else if (args.length == 2 && "getAddress".equals(args[1])) {
-               System.out.println(adapter.getAddress());
+               if (adapter.isEnabled())
+                       System.out.println(adapter.getAddress());
+               else
+                       System.err.println("blueooth is not enabled!");
 // } end of get bluetooth mac address
         } else {
             System.err.println(longHelp());
