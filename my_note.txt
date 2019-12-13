@@ -18,6 +18,36 @@ export CLASSPATH=$base/framework/svc.jar
 exec app_process $base/bin com.android.commands.svc.Svc $*
 
 
+$ adb shell
+msm8953_32:/ $ base=/system
+msm8953_32:/ $ export CLASSPATH=$base/framework/svc.jar                                                                        msm8953_32:/ $ echo $CLASSPATH                                            
+/system/framework/svc.jar
+msm8953_32:/ $ app_process $base/bin com.android.commands.svc.Svc $*
+Available commands:
+    help         Show information about the subcommands
+    power        Control the power manager
+    data         Control mobile data connectivity
+    wifi         Control the Wi-Fi manager
+    usb          Control Usb state
+    nfc          Control NFC functions
+    bluetooth    Control Bluetooth service
+    network      Manage network
+msm8953_32:/ $ app_process $base/bin com.android.commands.svc.Svc wifi                                                                                                                                
+Control the Wi-Fi manager
+
+usage: svc wifi [enable|disable]
+         Turn Wi-Fi on or off.
+
+
+$ adb shell
+msm8953_32:/ $ export CLASSPATH=/system/framework/svc.jar
+msm8953_32:/ $ app_process /system/bin com.android.commands.svc.Svc wifi
+Control the Wi-Fi manager
+
+usage: svc wifi [enable|disable]
+         Turn Wi-Fi on or off.
+
+
 $ tree frameworks/base/cmds/svc/
 frameworks/base/cmds/svc/
 ├── Android.mk
