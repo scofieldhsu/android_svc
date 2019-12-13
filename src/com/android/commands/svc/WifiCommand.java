@@ -20,6 +20,7 @@ import android.os.ServiceManager;
 import android.os.RemoteException;
 import android.net.wifi.IWifiManager;
 import android.content.Context;
+import android.net.wifi.WifiInfo;
 
 public class WifiCommand extends Svc.Command {
     public WifiCommand() {
@@ -41,6 +42,32 @@ public class WifiCommand extends Svc.Command {
         boolean validCommand = false;
         if (args.length >= 2) {
             boolean flag = false;
+
+// start of get wifi mac address {
+                       if ("getWifiInfo".equals(args[1])) {
+                               IWifiManager wifiMgr = IWifiManager.Stub.asInterface(ServiceManager.getService(Context.WIFI_SERVICE));
+                               try {
+                                       WifiInfo wifiInfo = wifiMgr.getWifiInfo();
+                                       System.out.println(wifiInfo);
+                               }
+                               catch (RemoteException e) {
+                                       System.err.println("Wi-Fi operation failed: " + e);
+                               }
+                               return;
+                       }
+                       else if ("getAddress".equals(args[1])) {
+                               IWifiManager wifiMgr = IWifiManager.Stub.asInterface(ServiceManager.getService(Context.WIFI_SERVICE));
+                               try {
+                                       WifiInfo wifiInfo = wifiMgr.getWifiInfo();
+                                       System.out.println(wifiInfo.getMacAddress());
+                               }
+                               catch (RemoteException e) {
+                                       System.err.println("Wi-Fi operation failed: " + e);
+                               }
+                               return;
+                       }
+// } end of get wifi mac address
+
             if ("enable".equals(args[1])) {
                 flag = true;
                 validCommand = true;
