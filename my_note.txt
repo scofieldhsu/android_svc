@@ -9,6 +9,15 @@ Available commands:
     bluetooth    Control Bluetooth service
 
 
+$ adb shell cat /system/bin/svc
+# Script to start "am" on the device, which has a very rudimentary
+# shell.
+#
+base=/system
+export CLASSPATH=$base/framework/svc.jar
+exec app_process $base/bin com.android.commands.svc.Svc $*
+
+
 $ tree frameworks/base/cmds/svc/
 frameworks/base/cmds/svc/
 ├── Android.mk
