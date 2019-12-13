@@ -1,0 +1,43 @@
+$ tree frameworks/base/cmds/svc/
+frameworks/base/cmds/svc/
+├── Android.mk
+├── MODULE_LICENSE_APACHE2
+├── NOTICE
+├── src
+│   └── com
+│       └── android
+│           └── commands
+│               └── svc
+│                   ├── BluetoothCommand.java
+│                   ├── DataCommand.java
+│                   ├── NfcCommand.java
+│                   ├── PowerCommand.java
+│                   ├── Svc.java
+│                   ├── UsbCommand.java
+│                   └── WifiCommand.java
+└── svc
+5 directories, 11 files
+
+
+$ git clone https://github.com/scofieldhsu/android_svc.git
+=> /media/scofield/ssd1T/my_github/android_svc/
+
+$ cd android_svc/
+
+$ ln -s /media/scofield/ssd1T/my_github/android_svc/ my_svc
+=> lrwxrwxrwx   1 scofield scofield      44 12月 13 11:42 my_svc -> /media/scofield/ssd1T/my_github/android_svc/
+
+$ mmm my_svc
+($ mmm frameworks/base/cmds/svc/)
+
+$ adb root
+
+$ adb remount
+
+$ adb push out/target/product/xxx/system/framework/svc.jar /system/framework/
+
+$ adb shell sync
+
+$ adb shell svc
+
+
