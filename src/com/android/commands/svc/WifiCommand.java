@@ -16,12 +16,18 @@
 
 package com.android.commands.svc;
 
+
 import android.os.ServiceManager;
 import android.os.RemoteException;
 import android.net.wifi.IWifiManager;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiInfo;
+import android.content.pm.ParceledListSlice;
+import android.net.wifi.WifiConfiguration;
+
+import java.util.List;
+
 
 public class WifiCommand extends Svc.Command {
     public WifiCommand() {
@@ -72,6 +78,28 @@ public class WifiCommand extends Svc.Command {
                                return;
                        }
 // } end of get wifi mac address
+			else if ("getConfig".equals(args[1])) {
+				IWifiManager wifiMgr = IWifiManager.Stub.asInterface(ServiceManager.getService(Context.WIFI_SERVICE));
+				try {
+					ParceledListSlice<WifiConfiguration> parceledList = wifiMgr.getConfiguredNetworks();
+					if (parceledList == null) {
+						System.err.println("WifiConfiguration list is null! ");
+						//return Collections.emptyList();
+						return;
+					}
+
+					//List<WifiConfiguration> configList = wifiMgr.getConfiguredNetworks();
+					List<WifiConfiguration> configList = parceledList.getList();
+					System.out.println("number of WifiConfigurations: " + configList.size());
+					for (WifiConfiguration c : configList) {
+						System.out.println("\tWifiConfiguration: \n" + c);
+					}
+				}
+				catch (RemoteException e) {
+					System.err.println("Wi-Fi operation failed: " + e);
+				}
+				return;
+			}
 
             if ("enable".equals(args[1])) {
                 flag = true;
