@@ -100,6 +100,72 @@ public class WifiCommand extends Svc.Command {
 				}
 				return;
 			}
+			else if ("connect".equals(args[1])) {
+				/*
+				connectToAccessPoint() of packages/apps/Car/Settings/src/com/android/car/settings/wifi/AddWifiFragment.java
+				*/
+
+				if (args.length<4) {
+					System.err.println("command: svc wifi connect <none|wep|psk> <ssid> <password>, ex:\n\t"+
+						"svc wifi connect psk aAP 12345678");
+					return;
+				}
+
+				IWifiManager wifiMgr = IWifiManager.Stub.asInterface(ServiceManager.getService(Context.WIFI_SERVICE));
+
+				WifiConfiguration wifiConfig = new WifiConfiguration();
+
+				wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+				wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+				wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+				wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+				wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+				wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+
+				if ("none".equals(args[2])) {
+					wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+					wifiConfig.allowedAuthAlgorithms.clear();
+				}
+				else if ("wep".equals(args[2])) {
+					wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+					wifiConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+					wifiConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+					wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+					wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+
+					String password = args[4];
+					//wifiConfig.wepKeys[0] = isHexString(password) ? password : "\"" + password + "\"";
+					wifiConfig.wepTxKeyIndex = 0;
+				}
+				else if ("psk".equals(args[2])) {
+					wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+					wifiConfig.preSharedKey = String.format("\"%s\"", args[4]);
+				}
+				else {
+					System.err.println("command: svc wifi connect <none|wep|psk> <ssid> <password>, ex:\n\t"+
+						"svc wifi connect psk aAP 12345678");
+					return;
+				}
+
+				wifiConfig.SSID = String.format("\"%s\"", args[3]);
+
+				try {
+					//int netId = wifiMgr.addNetwork(wifiConfig);
+					int netId = wifiMgr.addOrUpdateNetwork(wifiConfig);
+					if (netId == -1) {
+						System.err.println("addOrUpdateNetwork() failed!");
+						return;
+					}
+
+					System.out.println("connect WifiConfiguration: \n" + wifiConfig);
+
+					wifiMgr.enableNetwork(netId, true);
+				}
+				catch (RemoteException e) {
+					System.err.println("Wi-Fi operation failed: " + e);
+				}
+				return;
+			}
 
             if ("enable".equals(args[1])) {
                 flag = true;
