@@ -1,7 +1,7 @@
 # android_svc
 
 
-$ adb shell svc
+* $ adb shell svc
 
 Available commands:
 
@@ -20,9 +20,12 @@ nfc          Control NFC functions
 bluetooth    Control Bluetooth service
 
 
-frameworks/base/cmds/svc/ of original Android source code
+* frameworks/base/cmds/svc/ of original Android source code
 
 https://android.googlesource.com/platform/frameworks/base/+/refs/heads/oreo-cts-release/cmds/svc/
+
+
+* add svc command 'svc wifi connect <none|wep|psk> <ssid> <password>' to connect wifi
 
 
 * add ipv6 network commands:
